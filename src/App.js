@@ -1,25 +1,84 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
 
-function App() {
+export default function App() {
+  const [tasks, setTasks] = useState({
+    tasks: [],
+    task: "",
+  });
+  const [projects, setProjects] = useState({
+    projects: [],
+    project: "",
+  });
+  const [toggleAddProject, setToggleAddProject] = useState(false);
+  const [toggleAddTask, setToggleAddTask] = useState(false);
+
+  function addProject() {
+    setToggleAddProject(false);
+    setProjects((prev) => {
+      return {
+        ...prev,
+        projects: [
+          ...prev.projects,
+          {
+            name: projects.project,
+          },
+        ],
+      };
+    });
+  }
+  function handleChange(e) {
+    if (e.target.id === "project") {
+      setProjects((prev) => {
+        return {
+          ...prev,
+          project: e.target.value,
+        };
+      });
+    } else if (e.target.id === "task") {
+      setTasks((prev) => {
+        return {
+          ...prev,
+          task: e.target.value,
+        };
+      });
+    }
+  }
+  console.log(projects);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <aside>
+        <h1>ToDo Mio</h1>
+        <div className="filters">
+          <button>Home</button>
+          <button>Today</button>
+          <button>Week</button>
+        </div>
+        {toggleAddProject && (
+          <div className="new-project">
+            <input
+              type="text"
+              placeholder="Project name"
+              id="project"
+              onChange={(e) => handleChange(e)}
+            />
+            <div className="proj-btns">
+              <button onClick={() => addProject()}>Add</button>
+              <button onClick={() => setToggleAddProject(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
+        {!toggleAddProject && (
+          <div
+            className="add-proj-btn"
+            onClick={() => {
+              setToggleAddProject(true);
+            }}
+          >
+            + Add Project
+          </div>
+        )}
+      </aside>
+      <main></main>
+    </>
   );
 }
-
-export default App;
