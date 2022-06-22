@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Tasks from "./Tasks";
 import { nanoid } from "nanoid";
 
 export default function App() {
-  const [dataInput, setDataInput] = useState({
+  const [inputData, setInputData] = useState({
     task: "",
-    data: "",
+    date: "",
     project: "",
   });
   const [tasks, setTasks] = useState([]);
@@ -16,13 +16,20 @@ export default function App() {
     filter: "Home",
     projectId: null,
   });
+  useEffect(() => {
+    setInputData({
+      task: "",
+      date: "",
+      project: "",
+    });
+  }, [tasks, projects]);
 
   function addProject() {
     setToggleAddProject(false);
     setProjects((prev) => {
       return [
         {
-          name: dataInput.project,
+          name: inputData.project,
           id: nanoid(),
           tasks: [],
         },
@@ -38,8 +45,8 @@ export default function App() {
       setTasks((prev) => {
         return [
           {
-            title: dataInput.task,
-            date: dataInput.date,
+            title: inputData.task,
+            date: inputData.date,
             id: nanoid(),
           },
           ...prev,
@@ -48,14 +55,14 @@ export default function App() {
     }
   }
   function handleChange(e) {
-    setDataInput((prev) => {
+    setInputData((prev) => {
       return {
         ...prev,
         [e.target.id]: e.target.value,
       };
     });
   }
-
+  console.log(inputData);
   return (
     <>
       <aside>
@@ -90,6 +97,7 @@ export default function App() {
               placeholder="Project name"
               id="project"
               onChange={(e) => handleChange(e)}
+              value={inputData.project}
             />
             <div className="proj-btns">
               <button onClick={() => addProject()}>Add</button>
@@ -98,7 +106,7 @@ export default function App() {
           </div>
         )}
 
-        {projects.projects.map((proj) => (
+        {projects.map((proj) => (
           <li
             key={proj.id}
             onClick={() => {
@@ -128,8 +136,8 @@ export default function App() {
         {
           <Tasks
             selectedFilter={selectedFilter}
-            tasks={tasks.tasks}
-            projects={projects.projects}
+            tasks={tasks}
+            projects={projects}
           />
         }
         {toggleAddTask && (
@@ -140,6 +148,7 @@ export default function App() {
               id="task"
               name="task"
               onChange={(e) => handleChange(e)}
+              value={inputData.task}
             />
             <input
               type="date"
@@ -148,6 +157,7 @@ export default function App() {
               onChange={(e) => {
                 handleChange(e);
               }}
+              value={inputData.date}
             />
             <div className="task-btns">
               <button onClick={() => addTask()}>Add</button>
