@@ -39,8 +39,23 @@ export default function App() {
   }
   function addTask() {
     setToggleAddTask(false);
+    // if project is selected, add task to selected project tasks
     if (selectedFilter.projectId) {
-      //   map through projects if id matches selectedId get all tasks
+      setProjects((prev) => {
+        return prev.map((proj) => {
+          // match id of selected proj and all projects, return updated proj of matched id
+          return selectedFilter.projectId === proj.id
+            ? {
+                ...proj,
+                tasks: [
+                  ...proj.tasks,
+                  { title: inputData.task, date: inputData.date, id: nanoid() },
+                ],
+              }
+            : { ...proj };
+        });
+      });
+      // if no project selected add task to all tasks
     } else {
       setTasks((prev) => {
         return [
@@ -62,7 +77,6 @@ export default function App() {
       };
     });
   }
-  console.log(inputData);
   return (
     <>
       <aside>
