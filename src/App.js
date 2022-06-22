@@ -96,7 +96,12 @@ export default function App() {
       ];
     });
   }
-
+  function deleteProject(e, proj) {
+    e.stopPropagation();
+    setProjects((prev) => {
+      return prev.filter((p) => proj.id !== p.id);
+    });
+  }
   function addTask() {
     setToggleAddTask(false);
     // if project is selected, add task to selected project tasks
@@ -191,10 +196,7 @@ export default function App() {
             <div
               className="proj-delete"
               onClick={(e) => {
-                e.stopPropagation();
-                setProjects((prev) => {
-                  return prev.filter((p) => proj.id !== p.id);
-                });
+                deleteProject(e, proj);
               }}
             >
               X

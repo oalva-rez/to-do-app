@@ -10,47 +10,19 @@ export default function Tasks(props) {
     proj.tasks.forEach((task) => allProjTasks.push(task))
   );
   const allTasks = [...props.tasks, ...allProjTasks];
+  let tasksToRender;
 
   if (props.selectedFilter.filter === "Home") {
-    return (
-      <ul>
-        {allTasks.map((task) => (
-          <li key={task.id}>
-            {task.title}
-            <div>{task.date}</div>
-          </li>
-        ))}
-      </ul>
-    );
+    tasksToRender = allTasks;
   } else if (props.selectedFilter.filter === "Today") {
     let todayTasks = allTasks.filter((task) => isToday(parseISO(task.date)));
-    console.log(parseISO("2022-06-15"));
-    return (
-      <ul>
-        {todayTasks.map((task) => (
-          <li key={task.id}>
-            {task.title}
-            <div>{task.date}</div>
-          </li>
-        ))}
-      </ul>
-    );
+    tasksToRender = todayTasks;
   } else if (props.selectedFilter.filter === "Week") {
     let weekFromToday = addDays(new Date(), 7);
     let weekTasks = allTasks.filter((task) =>
       isBefore(parseISO(task.date), weekFromToday)
     );
-
-    return (
-      <ul>
-        {weekTasks.map((task) => (
-          <li key={task.id}>
-            {task.title}
-            <div>{task.date}</div>
-          </li>
-        ))}
-      </ul>
-    );
+    tasksToRender = weekTasks;
   } else {
     const allSelectedProjTasks = [];
     props.projects.forEach((proj) => {
@@ -58,16 +30,16 @@ export default function Tasks(props) {
         allSelectedProjTasks.push(...proj.tasks);
       }
     });
-
-    return (
-      <ul>
-        {allSelectedProjTasks.map((task) => (
-          <li key={task.id}>
-            {task.title}
-            <div>{task.date}</div>
-          </li>
-        ))}
-      </ul>
-    );
+    tasksToRender = allSelectedProjTasks;
   }
+  return (
+    <ul>
+      {tasksToRender.map((task) => (
+        <li key={task.id}>
+          {task.title}
+          <div>{task.date}</div>
+        </li>
+      ))}
+    </ul>
+  );
 }
