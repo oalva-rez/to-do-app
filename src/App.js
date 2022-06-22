@@ -3,6 +3,11 @@ import Tasks from "./Tasks";
 import { nanoid } from "nanoid";
 
 export default function App() {
+  const [dataInput, setDataInput] = useState({
+    task: "",
+    data: "",
+    project: "",
+  });
   const [tasks, setTasks] = useState({
     tasks: [],
     task: "",
