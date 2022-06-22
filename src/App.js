@@ -8,15 +8,8 @@ export default function App() {
     data: "",
     project: "",
   });
-  const [tasks, setTasks] = useState({
-    tasks: [],
-    task: "",
-    date: "",
-  });
-  const [projects, setProjects] = useState({
-    projects: [],
-    project: "",
-  });
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [toggleAddProject, setToggleAddProject] = useState(false);
   const [toggleAddTask, setToggleAddTask] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState({
@@ -27,17 +20,14 @@ export default function App() {
   function addProject() {
     setToggleAddProject(false);
     setProjects((prev) => {
-      return {
-        projects: [
-          ...prev.projects,
-          {
-            name: projects.project,
-            id: nanoid(),
-            tasks: [],
-          },
-        ],
-        project: "",
-      };
+      return [
+        {
+          name: dataInput.project,
+          id: nanoid(),
+          tasks: [],
+        },
+        ...prev,
+      ];
     });
   }
   function addTask() {
@@ -46,37 +36,24 @@ export default function App() {
       //   map through projects if id matches selectedId get all tasks
     } else {
       setTasks((prev) => {
-        return {
-          tasks: [
-            ...prev.tasks,
-            {
-              title: tasks.task,
-              date: tasks.date,
-              id: nanoid(),
-            },
-          ],
-          task: "",
-          date: "",
-        };
+        return [
+          {
+            title: dataInput.task,
+            date: dataInput.date,
+            id: nanoid(),
+          },
+          ...prev,
+        ];
       });
     }
   }
   function handleChange(e) {
-    if (e.target.id === "project") {
-      setProjects((prev) => {
-        return {
-          ...prev,
-          project: e.target.value,
-        };
-      });
-    } else if (e.target.id === "task" || e.target.id === "date") {
-      setTasks((prev) => {
-        return {
-          ...prev,
-          [e.target.name]: e.target.value,
-        };
-      });
-    }
+    setDataInput((prev) => {
+      return {
+        ...prev,
+        [e.target.id]: e.target.value,
+      };
+    });
   }
 
   return (
