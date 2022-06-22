@@ -8,8 +8,67 @@ export default function App() {
     date: "",
     project: "",
   });
-  const [tasks, setTasks] = useState([]);
-  const [projects, setProjects] = useState([]);
+  const [tasks, setTasks] = useState([
+    {
+      title: "a",
+      date: "",
+      id: nanoid(),
+    },
+    {
+      title: "b",
+      date: "",
+      id: nanoid(),
+    },
+    {
+      title: "c",
+      date: inputData.date,
+      id: nanoid(),
+    },
+  ]);
+  const [projects, setProjects] = useState([
+    {
+      name: "proj a",
+      id: nanoid(),
+      tasks: [
+        {
+          title: "proj a task a",
+          date: "",
+          id: nanoid(),
+        },
+        {
+          title: "proj a task b",
+          date: "",
+          id: nanoid(),
+        },
+        {
+          title: "proj a task c",
+          date: "",
+          id: nanoid(),
+        },
+      ],
+    },
+    {
+      name: "proj b",
+      id: nanoid(),
+      tasks: [
+        {
+          title: "proj b task a",
+          date: "",
+          id: nanoid(),
+        },
+        {
+          title: "proj b task b",
+          date: "",
+          id: nanoid(),
+        },
+        {
+          title: "proj b task c",
+          date: "",
+          id: nanoid(),
+        },
+      ],
+    },
+  ]);
   const [toggleAddProject, setToggleAddProject] = useState(false);
   const [toggleAddTask, setToggleAddTask] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState({
@@ -37,6 +96,7 @@ export default function App() {
       ];
     });
   }
+
   function addTask() {
     setToggleAddTask(false);
     // if project is selected, add task to selected project tasks
@@ -128,6 +188,17 @@ export default function App() {
             }}
           >
             {proj.name}
+            <div
+              className="proj-delete"
+              onClick={(e) => {
+                e.stopPropagation();
+                setProjects((prev) => {
+                  return prev.filter((p) => proj.id !== p.id);
+                });
+              }}
+            >
+              X
+            </div>
           </li>
         ))}
 
