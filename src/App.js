@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Tasks from "./Tasks";
 import { nanoid } from "nanoid";
+import add from "./assets/add.png";
 
 export default function App() {
   const [inputData, setInputData] = useState({
@@ -156,20 +157,32 @@ export default function App() {
         )}
 
         {!toggleAddProject && (
-          <div
-            className="add-proj-btn"
-            onClick={() => {
-              setToggleAddProject(true);
-            }}
-          >
-            + Add Project
+          <div className="add-proj">
+            <h2>Projects</h2>
+            <img
+              className="add-proj-btn"
+              onClick={() => {
+                setToggleAddProject(true);
+              }}
+              src={add}
+              alt="add project"
+            />
           </div>
         )}
       </aside>
       <main>
         <div className="tasks-header">
           <h2>{selectedFilter.filter}</h2>
-          <h3>Date:</h3>
+          {!toggleAddTask && (
+            <img
+              className="add-task-btn"
+              onClick={() => {
+                setToggleAddTask(true);
+              }}
+              src={add}
+              alt="add task"
+            />
+          )}
         </div>
         {
           <Tasks
@@ -202,16 +215,6 @@ export default function App() {
               <button onClick={() => addTask()}>Add</button>
               <button onClick={() => setToggleAddTask(false)}>Cancel</button>
             </div>
-          </div>
-        )}
-        {!toggleAddTask && (
-          <div
-            className="add-task-btn"
-            onClick={() => {
-              setToggleAddTask(true);
-            }}
-          >
-            + Add Task
           </div>
         )}
       </main>
