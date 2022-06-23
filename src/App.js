@@ -8,67 +8,8 @@ export default function App() {
     date: "",
     project: "",
   });
-  const [tasks, setTasks] = useState([
-    {
-      title: "a",
-      date: "",
-      id: nanoid(),
-    },
-    {
-      title: "b",
-      date: "",
-      id: nanoid(),
-    },
-    {
-      title: "c",
-      date: inputData.date,
-      id: nanoid(),
-    },
-  ]);
-  const [projects, setProjects] = useState([
-    {
-      name: "proj a",
-      id: nanoid(),
-      tasks: [
-        {
-          title: "proj a task a",
-          date: "",
-          id: nanoid(),
-        },
-        {
-          title: "proj a task b",
-          date: "",
-          id: nanoid(),
-        },
-        {
-          title: "proj a task c",
-          date: "",
-          id: nanoid(),
-        },
-      ],
-    },
-    {
-      name: "proj b",
-      id: nanoid(),
-      tasks: [
-        {
-          title: "proj b task a",
-          date: "",
-          id: nanoid(),
-        },
-        {
-          title: "proj b task b",
-          date: "",
-          id: nanoid(),
-        },
-        {
-          title: "proj b task c",
-          date: "",
-          id: nanoid(),
-        },
-      ],
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
   const [toggleAddProject, setToggleAddProject] = useState(false);
   const [toggleAddTask, setToggleAddTask] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState({
@@ -85,71 +26,50 @@ export default function App() {
 
   function addProject() {
     setToggleAddProject(false);
+    let pId = nanoid();
     setProjects((prev) => {
       return [
         {
           name: inputData.project,
-          id: nanoid(),
-          tasks: [],
+          id: pId,
         },
         ...prev,
       ];
     });
+    // select project that was just added
+    setSelectedFilter({ filter: inputData.project, projectId: pId });
   }
   function deleteProject(e, proj) {
     e.stopPropagation();
     setProjects((prev) => {
       return prev.filter((p) => proj.id !== p.id);
     });
+    setTasks((prev) => {
+      return prev.filter((t) => proj.id !== t.projectId);
+    });
   }
 
   function deleteTask(e, task) {
     e.stopPropagation();
-    projects.forEach((proj) => {
-      proj.tasks.forEach((pt) => {
-        if (pt.id === task.id) {
-          setProjects((prev) => {
-            let newProjTasks = [];
-            let newProjects = [];
-            prev.forEach((x) => {
-              if (x.id === proj.id) {
-                newProjTasks.push(...x.tasks.filter((y) => y.id !== task.id));
-                newProjects = [
-                  ...prev,
-                  {
-                    name: proj.name,
-                    id: proj.id,
-                    tasks: [...newProjects],
-                  },
-                ];
-              }
-            });
-            return newProjects;
-          });
-        }
-      });
-    });
+    setTasks((prev) => prev.filter((t) => task.id !== t.id));
   }
-  console.log(projects);
+
   function addTask() {
     setToggleAddTask(false);
-    // if project is selected, add task to selected project tasks
+    // if project is selected, add task with selected project id
     if (selectedFilter.projectId) {
-      setProjects((prev) => {
-        return prev.map((proj) => {
-          // match id of selected proj and all projects, return updated proj of matched id
-          return selectedFilter.projectId === proj.id
-            ? {
-                ...proj,
-                tasks: [
-                  ...proj.tasks,
-                  { title: inputData.task, date: inputData.date, id: nanoid() },
-                ],
-              }
-            : { ...proj };
-        });
+      setTasks((prev) => {
+        return [
+          {
+            title: inputData.task,
+            date: inputData.date,
+            id: nanoid(),
+            projectId: selectedFilter.projectId,
+          },
+          ...prev,
+        ];
       });
-      // if no project selected add task to all tasks
+      // if no project selected add task to all tasks with null project
     } else {
       setTasks((prev) => {
         return [
@@ -157,6 +77,7 @@ export default function App() {
             title: inputData.task,
             date: inputData.date,
             id: nanoid(),
+            projectId: null,
           },
           ...prev,
         ];
@@ -198,6 +119,26 @@ export default function App() {
             Week
           </button>
         </div>
+        <ul>
+          {projects.map((proj) => (
+            <li
+              key={proj.id}
+              onClick={() => {
+                setSelectedFilter({ filter: proj.name, projectId: proj.id });
+              }}
+            >
+              {proj.name}
+              <div
+                className="proj-delete"
+                onClick={(e) => {
+                  deleteProject(e, proj);
+                }}
+              >
+                X
+              </div>
+            </li>
+          ))}
+        </ul>
         {toggleAddProject && (
           <div className="new-project">
             <input
@@ -213,25 +154,6 @@ export default function App() {
             </div>
           </div>
         )}
-
-        {projects.map((proj) => (
-          <li
-            key={proj.id}
-            onClick={() => {
-              setSelectedFilter({ filter: proj.name, projectId: proj.id });
-            }}
-          >
-            {proj.name}
-            <div
-              className="proj-delete"
-              onClick={(e) => {
-                deleteProject(e, proj);
-              }}
-            >
-              X
-            </div>
-          </li>
-        ))}
 
         {!toggleAddProject && (
           <div

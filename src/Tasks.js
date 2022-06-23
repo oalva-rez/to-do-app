@@ -5,29 +5,22 @@ import addDays from "date-fns/addDays";
 import isBefore from "date-fns/isBefore";
 
 export default function Tasks(props) {
-  const allProjTasks = [];
-  props.projects.forEach((proj) =>
-    proj.tasks.forEach((task) => allProjTasks.push(task))
-  );
-  const allTasks = [...props.tasks, ...allProjTasks];
-  let tasksToRender;
+  let tasksToRender = [];
 
   if (props.selectedFilter.filter === "Home") {
-    tasksToRender = allTasks;
+    tasksToRender = props.tasks;
   } else if (props.selectedFilter.filter === "Today") {
-    let todayTasks = allTasks.filter((task) => isToday(parseISO(task.date)));
-    tasksToRender = todayTasks;
+    tasksToRender = props.tasks.filter((task) => isToday(parseISO(task.date)));
   } else if (props.selectedFilter.filter === "Week") {
     let weekFromToday = addDays(new Date(), 7);
-    let weekTasks = allTasks.filter((task) =>
+    tasksToRender = props.tasks.filter((task) =>
       isBefore(parseISO(task.date), weekFromToday)
     );
-    tasksToRender = weekTasks;
   } else {
     const allSelectedProjTasks = [];
-    props.projects.forEach((proj) => {
-      if (proj.id === props.selectedFilter.projectId) {
-        allSelectedProjTasks.push(...proj.tasks);
+    props.tasks.forEach((task) => {
+      if (task.projectId === props.selectedFilter.projectId) {
+        allSelectedProjTasks.push(task);
       }
     });
     tasksToRender = allSelectedProjTasks;
