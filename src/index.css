@@ -8,5 +8,235 @@ body {
   font-family: "Source Sans Pro", sans-serif;
 }
 :root {
-  --color-back: brown;
+  --background-color: #ffe7dc;
+  --input--background: #ffe9de;
+  --tile-color: #ffffff;
+  --accent-color: #fd7b38;
+  --font-color: #65676d;
+  --border-rad: 20px;
+  --selected-filter-color: #ffcdb4;
+  --tile-margin: 20px;
+  --tile-padding: 20px;
+  --btn-brad: 5px;
+}
+
+#root {
+  min-height: 100vh;
+  display: grid;
+  grid-template: 1fr / 0.2fr 1fr;
+  background-color: var(--background-color);
+  color: var(--font-color);
+}
+img,
+i,
+button {
+  cursor: pointer;
+}
+aside {
+  display: flex;
+  flex-direction: column;
+  margin: var(--tile-margin);
+  padding: var(--tile-padding) 0px;
+  background-color: var(--tile-color);
+  border-radius: var(--border-rad);
+  align-items: center;
+}
+aside h1 {
+  padding: 30px 0px;
+  font-size: 2rem;
+  color: black;
+}
+
+aside .filters {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.filters button {
+  height: 50px;
+  border: none;
+  outline: none;
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--font-color);
+  letter-spacing: 0.7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  gap: 1.5rem;
+  background-color: #fff;
+  border-right: solid 7px transparent;
+}
+.filters p {
+  width: 60px;
+  text-align: left;
+}
+
+.project--container {
+  width: 100%;
+  padding: 10px var(--tile-padding);
+}
+.project--header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: black;
+  margin-bottom: 7px;
+}
+
+.project--new-proj {
+  padding: 5px 5px;
+  border-radius: var(--btn-brad);
+  background-color: rgba(211, 211, 211, 0.099);
+  border-radius: var(--btn-brad);
+  padding: 15px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.project--new-proj input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background-color: var(--input--background);
+  padding: 5px;
+  border-radius: var(--btn-brad);
+}
+.project--btns {
+  display: flex;
+  margin-top: 5px;
+  gap: 5px;
+}
+.project--btns button,
+.tasks--btns > * {
+  flex: 1;
+  outline: none;
+  border: none;
+  padding: 5px;
+  border-radius: var(--btn-brad);
+  font-weight: 600;
+  color: var(--font-color);
+  background-color: #e7e7e7;
+}
+
+.project--item {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 20px;
+  cursor: pointer;
+  border-right: solid 7px transparent;
+}
+.project--item i {
+  font-size: 0.9rem;
+}
+.add {
+  width: 30px;
+  height: 30px;
+}
+
+/* main */
+
+main {
+  display: grid;
+  grid-template: 0.1fr 1fr / 1fr;
+  margin: var(--tile-margin);
+  padding: var(--tile-padding) var(--tile-padding);
+  background-color: var(--tile-color);
+  border-radius: var(--border-rad);
+}
+
+.greeting {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.greeting h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.greeting h2 {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.tasks--container {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  justify-self: center;
+}
+
+.tasks--header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  border-bottom: 1px solid rgb(183, 183, 183);
+  font-size: 1.5rem;
+  padding: 10px 20px;
+}
+
+.tasks--header img {
+  width: 40px;
+  height: 40px;
+}
+
+.tasks--new-task {
+  width: 70%;
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  padding: 5px 5px;
+  border-radius: var(--btn-brad);
+  background-color: rgba(211, 211, 211, 0.099);
+  border-radius: var(--btn-brad);
+  padding: 15px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  gap: 5px;
+  margin-top: 20px;
+}
+
+.tasks--inputs {
+  display: flex;
+  gap: 5px;
+}
+#task {
+  flex: 1;
+}
+#date {
+  width: 170px;
+}
+#task,
+#date {
+  border: none;
+  outline: none;
+  background-color: var(--input--background);
+  padding: 5px;
+  border-radius: var(--btn-brad);
+}
+.tasks--btns {
+  display: flex;
+  gap: 5px;
+}
+.tasks--list {
+  display: grid;
+  justify-items: center;
+}
+.tasks--item {
+  display: grid;
+  grid-template: 1fr / 0.1fr 1.3fr 0.3fr 0.1fr;
+  align-items: center;
+  list-style: none;
+  padding: 10px;
+  width: 90%;
+  font-size: 1.3rem;
+}
+.tasks--item i,
+.tasks--item img {
+  justify-self: center;
+}
+.tasks--item img {
+  width: 30px;
+  height: 30px;
 }

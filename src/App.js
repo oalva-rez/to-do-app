@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Tasks from "./Tasks";
+import Greeting from "./Greeting";
 import { nanoid } from "nanoid";
 import add from "./assets/add.png";
 
@@ -17,6 +18,17 @@ export default function App() {
     filter: "Home",
     projectId: null,
   });
+  const selectedStyle = {
+    backgroundColor: "#ffcdb4",
+    borderRight: "7px solid #FD7B38",
+    transition: "background-color, 250ms",
+    transitionTimingFunction: "ease-in-out",
+  };
+  const unselectedStyle = {
+    backgroundColor: "#FFFFFF",
+    transition: "background-color, 250ms",
+    transitionTimingFunction: "ease-in",
+  };
   useEffect(() => {
     setInputData({
       task: "",
@@ -48,13 +60,22 @@ export default function App() {
     setTasks((prev) => {
       return prev.filter((t) => proj.id !== t.projectId);
     });
+    setSelectedFilter({ filter: "Home", projectId: null });
   }
 
   function deleteTask(e, task) {
     e.stopPropagation();
     setTasks((prev) => prev.filter((t) => task.id !== t.id));
   }
-
+  function completeTask(task) {
+    setTasks((prev) =>
+      prev.map((prevTask) => {
+        return prevTask.id === task.id
+          ? { ...prevTask, isCompleted: !prevTask.isCompleted }
+          : { ...prevTask };
+      })
+    );
+  }
   function addTask() {
     setToggleAddTask(false);
     // if project is selected, add task with selected project id
@@ -66,6 +87,7 @@ export default function App() {
             date: inputData.date,
             id: nanoid(),
             projectId: selectedFilter.projectId,
+            isCompleted: false,
           },
           ...prev,
         ];
@@ -79,6 +101,7 @@ export default function App() {
             date: inputData.date,
             id: nanoid(),
             projectId: null,
+            isCompleted: false,
           },
           ...prev,
         ];
@@ -96,127 +119,156 @@ export default function App() {
   return (
     <>
       <aside>
-        <h1>ToDo Mio</h1>
+        <h1>Bingota</h1>
         <div className="filters">
           <button
             onClick={() =>
               setSelectedFilter({ filter: "Home", projectId: null })
             }
+            style={
+              selectedFilter.filter === "Home" ? selectedStyle : unselectedStyle
+            }
           >
-            Home
+            <i className="fa-solid fa-house"></i>
+            <p>HOME</p>
           </button>
           <button
             onClick={() =>
               setSelectedFilter({ filter: "Today", projectId: null })
             }
+            style={
+              selectedFilter.filter === "Today"
+                ? selectedStyle
+                : unselectedStyle
+            }
           >
-            Today
+            <i className="fa-solid fa-calendar-day"></i>
+            <p>TODAY</p>
           </button>
           <button
             onClick={() =>
               setSelectedFilter({ filter: "Week", projectId: null })
             }
+            style={
+              selectedFilter.filter === "Week" ? selectedStyle : unselectedStyle
+            }
           >
-            Week
+            <i className="fa-solid fa-calendar-week"></i>
+            <p>WEEK</p>
           </button>
         </div>
-        <ul>
-          {projects.map((proj) => (
-            <li
-              key={proj.id}
-              onClick={() => {
-                setSelectedFilter({ filter: proj.name, projectId: proj.id });
-              }}
-            >
-              {proj.name}
-              <div
-                className="proj-delete"
-                onClick={(e) => {
-                  deleteProject(e, proj);
-                }}
-              >
-                X
-              </div>
-            </li>
-          ))}
-        </ul>
-        {toggleAddProject && (
-          <div className="new-project">
-            <input
-              type="text"
-              placeholder="Project name"
-              id="project"
-              onChange={(e) => handleChange(e)}
-              value={inputData.project}
-            />
-            <div className="proj-btns">
-              <button onClick={() => addProject()}>Add</button>
-              <button onClick={() => setToggleAddProject(false)}>Cancel</button>
-            </div>
-          </div>
-        )}
 
-        {!toggleAddProject && (
-          <div className="add-proj">
+        <div className="project--container">
+          <div className="project--header">
             <h2>Projects</h2>
-            <img
-              className="add-proj-btn"
-              onClick={() => {
-                setToggleAddProject(true);
-              }}
-              src={add}
-              alt="add project"
-            />
+            {!toggleAddProject && (
+              <img
+                className="add"
+                onClick={() => {
+                  setToggleAddProject(true);
+                }}
+                src={add}
+                alt="add project"
+              />
+            )}
           </div>
-        )}
+          {toggleAddProject && (
+            <div className="project--new-proj">
+              <input
+                type="text"
+                placeholder="Project name"
+                id="project"
+                onChange={(e) => handleChange(e)}
+                value={inputData.project}
+              />
+              <div className="project--btns">
+                <button onClick={() => addProject()}>Add</button>
+                <button onClick={() => setToggleAddProject(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
+          <ul className="project--list">
+            {projects.map((proj) => (
+              <li
+                className="project--item"
+                key={proj.id}
+                onClick={() => {
+                  setSelectedFilter({ filter: proj.name, projectId: proj.id });
+                }}
+                style={
+                  selectedFilter.projectId === proj.id
+                    ? selectedStyle
+                    : unselectedStyle
+                }
+              >
+                {proj.name}
+
+                <i
+                  className="fa-solid fa-trash-can proj-delete"
+                  onClick={(e) => {
+                    deleteProject(e, proj);
+                  }}
+                ></i>
+              </li>
+            ))}
+          </ul>
+        </div>
       </aside>
       <main>
-        <div className="tasks-header">
-          <h2>{selectedFilter.filter}</h2>
-          {!toggleAddTask && (
-            <img
-              className="add-task-btn"
-              onClick={() => {
-                setToggleAddTask(true);
-              }}
-              src={add}
-              alt="add task"
+        <Greeting />
+        <div className="tasks--container">
+          <div className="tasks--header">
+            <h2>{selectedFilter.filter}</h2>
+            {!toggleAddTask && (
+              <img
+                className="add"
+                onClick={() => {
+                  setToggleAddTask(true);
+                }}
+                src={add}
+                alt="add task"
+              />
+            )}
+          </div>
+          {
+            <Tasks
+              selectedFilter={selectedFilter}
+              tasks={tasks}
+              projects={projects}
+              deleteTask={deleteTask}
+              completeTask={completeTask}
             />
+          }
+          {toggleAddTask && (
+            <div className="tasks--new-task">
+              <div className="tasks--inputs">
+                <input
+                  type="text"
+                  placeholder="Task name"
+                  id="task"
+                  name="task"
+                  onChange={(e) => handleChange(e)}
+                  value={inputData.task}
+                />
+                <input
+                  type="date"
+                  name="date"
+                  id="date"
+                  onChange={(e) => {
+                    handleChange(e);
+                  }}
+                  value={inputData.date}
+                />
+              </div>
+              <div className="tasks--btns">
+                <button onClick={() => addTask()}>Add</button>
+                <button onClick={() => setToggleAddTask(false)}>Cancel</button>
+              </div>
+            </div>
           )}
         </div>
-        {
-          <Tasks
-            selectedFilter={selectedFilter}
-            tasks={tasks}
-            projects={projects}
-            deleteTask={deleteTask}
-          />
-        }
-        {toggleAddTask && (
-          <div className="new-task">
-            <input
-              type="text"
-              placeholder="Task name"
-              id="task"
-              name="task"
-              onChange={(e) => handleChange(e)}
-              value={inputData.task}
-            />
-            <input
-              type="date"
-              name="date"
-              id="date"
-              onChange={(e) => {
-                handleChange(e);
-              }}
-              value={inputData.date}
-            />
-            <div className="task-btns">
-              <button onClick={() => addTask()}>Add</button>
-              <button onClick={() => setToggleAddTask(false)}>Cancel</button>
-            </div>
-          </div>
-        )}
       </main>
     </>
   );
