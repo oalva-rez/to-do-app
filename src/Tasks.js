@@ -38,6 +38,14 @@ export default function Tasks(props) {
         <li key={task.id}>
           {task.title}
           <div>{task.date}</div>
+          <div
+            // why is it passing both arguments with only one (e) parameter???
+            onClick={(e) => {
+              props.deleteTask(e, task);
+            }}
+          >
+            X
+          </div>
         </li>
       ))}
     </ul>

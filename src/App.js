@@ -102,6 +102,35 @@ export default function App() {
       return prev.filter((p) => proj.id !== p.id);
     });
   }
+
+  function deleteTask(e, task) {
+    e.stopPropagation();
+    projects.forEach((proj) => {
+      proj.tasks.forEach((pt) => {
+        if (pt.id === task.id) {
+          setProjects((prev) => {
+            let newProjTasks = [];
+            let newProjects = [];
+            prev.forEach((x) => {
+              if (x.id === proj.id) {
+                newProjTasks.push(...x.tasks.filter((y) => y.id !== task.id));
+                newProjects = [
+                  ...prev,
+                  {
+                    name: proj.name,
+                    id: proj.id,
+                    tasks: [...newProjects],
+                  },
+                ];
+              }
+            });
+            return newProjects;
+          });
+        }
+      });
+    });
+  }
+  console.log(projects);
   function addTask() {
     setToggleAddTask(false);
     // if project is selected, add task to selected project tasks
@@ -225,6 +254,7 @@ export default function App() {
             selectedFilter={selectedFilter}
             tasks={tasks}
             projects={projects}
+            deleteTask={deleteTask}
           />
         }
         {toggleAddTask && (
