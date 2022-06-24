@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Tasks from "./Tasks";
 import Greeting from "./Greeting";
+import SignIn from "./SignIn";
 import { nanoid } from "nanoid";
 import add from "./assets/add.png";
 import logo from "./assets/logo.png";
@@ -11,6 +12,7 @@ export default function App() {
     date: "",
     project: "",
   });
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [toggleAddProject, setToggleAddProject] = useState(false);
@@ -120,161 +122,176 @@ export default function App() {
   }
   return (
     <>
-      <aside>
-        <h1>
-          <img src={logo} alt="logo" />
-          Bingota
-        </h1>
-        <div className="filters">
-          <button
-            onClick={() =>
-              setSelectedFilter({ filter: "Home", projectId: null })
-            }
-            style={
-              selectedFilter.filter === "Home" ? selectedStyle : unselectedStyle
-            }
-          >
-            <i className="fa-solid fa-house"></i>
-            <p>HOME</p>
-          </button>
-          <button
-            onClick={() =>
-              setSelectedFilter({ filter: "Today", projectId: null })
-            }
-            style={
-              selectedFilter.filter === "Today"
-                ? selectedStyle
-                : unselectedStyle
-            }
-          >
-            <i className="fa-solid fa-calendar-day"></i>
-            <p>TODAY</p>
-          </button>
-          <button
-            onClick={() =>
-              setSelectedFilter({ filter: "Week", projectId: null })
-            }
-            style={
-              selectedFilter.filter === "Week" ? selectedStyle : unselectedStyle
-            }
-          >
-            <i className="fa-solid fa-calendar-week"></i>
-            <p>WEEK</p>
-          </button>
-        </div>
-
-        <div className="project--container">
-          <div className="project--header">
-            <h2>Projects</h2>
-            {!toggleAddProject && (
-              <img
-                className="add"
-                onClick={() => {
-                  setToggleAddProject(true);
-                }}
-                src={add}
-                alt="add project"
-              />
-            )}
-          </div>
-          {toggleAddProject && (
-            <div className="project--new-proj">
-              <input
-                type="text"
-                placeholder="Project name"
-                id="project"
-                onChange={(e) => handleChange(e)}
-                value={inputData.project}
-              />
-              <div className="project--btns">
-                <button onClick={() => addProject()}>Add</button>
-                <button onClick={() => setToggleAddProject(false)}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
-          <ul className="project--list">
-            {projects.map((proj) => (
-              <li
-                className="project--item"
-                key={proj.id}
-                onClick={() => {
-                  setSelectedFilter({ filter: proj.name, projectId: proj.id });
-                }}
+      {!isLoggedIn ? (
+        <SignIn />
+      ) : (
+        <>
+          <aside>
+            <h1>
+              <img src={logo} alt="logo" />
+              Bingota
+            </h1>
+            <div className="filters">
+              <button
+                onClick={() =>
+                  setSelectedFilter({ filter: "Home", projectId: null })
+                }
                 style={
-                  selectedFilter.projectId === proj.id
+                  selectedFilter.filter === "Home"
                     ? selectedStyle
                     : unselectedStyle
                 }
               >
-                {proj.name}
-
-                <i
-                  className="fa-solid fa-trash-can proj-delete"
-                  onClick={(e) => {
-                    deleteProject(e, proj);
-                  }}
-                ></i>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </aside>
-      <main>
-        <Greeting />
-        <div className="tasks--container">
-          <div className="tasks--header">
-            <h2>{selectedFilter.filter}</h2>
-            {!toggleAddTask && (
-              <img
-                className="add"
-                onClick={() => {
-                  setToggleAddTask(true);
-                }}
-                src={add}
-                alt="add task"
-              />
-            )}
-          </div>
-          {
-            <Tasks
-              selectedFilter={selectedFilter}
-              tasks={tasks}
-              projects={projects}
-              deleteTask={deleteTask}
-              completeTask={completeTask}
-            />
-          }
-          {toggleAddTask && (
-            <div className="tasks--new-task">
-              <div className="tasks--inputs">
-                <input
-                  type="text"
-                  placeholder="Task name"
-                  id="task"
-                  name="task"
-                  onChange={(e) => handleChange(e)}
-                  value={inputData.task}
-                />
-                <input
-                  type="date"
-                  name="date"
-                  id="date"
-                  onChange={(e) => {
-                    handleChange(e);
-                  }}
-                  value={inputData.date}
-                />
-              </div>
-              <div className="tasks--btns">
-                <button onClick={() => addTask()}>Add</button>
-                <button onClick={() => setToggleAddTask(false)}>Cancel</button>
-              </div>
+                <i className="fa-solid fa-house"></i>
+                <p>HOME</p>
+              </button>
+              <button
+                onClick={() =>
+                  setSelectedFilter({ filter: "Today", projectId: null })
+                }
+                style={
+                  selectedFilter.filter === "Today"
+                    ? selectedStyle
+                    : unselectedStyle
+                }
+              >
+                <i className="fa-solid fa-calendar-day"></i>
+                <p>TODAY</p>
+              </button>
+              <button
+                onClick={() =>
+                  setSelectedFilter({ filter: "Week", projectId: null })
+                }
+                style={
+                  selectedFilter.filter === "Week"
+                    ? selectedStyle
+                    : unselectedStyle
+                }
+              >
+                <i className="fa-solid fa-calendar-week"></i>
+                <p>WEEK</p>
+              </button>
             </div>
-          )}
-        </div>
-      </main>
+
+            <div className="project--container">
+              <div className="project--header">
+                <h2>Projects</h2>
+                {!toggleAddProject && (
+                  <img
+                    className="add"
+                    onClick={() => {
+                      setToggleAddProject(true);
+                    }}
+                    src={add}
+                    alt="add project"
+                  />
+                )}
+              </div>
+              {toggleAddProject && (
+                <div className="project--new-proj">
+                  <input
+                    type="text"
+                    placeholder="Project name"
+                    id="project"
+                    onChange={(e) => handleChange(e)}
+                    value={inputData.project}
+                  />
+                  <div className="project--btns">
+                    <button onClick={() => addProject()}>Add</button>
+                    <button onClick={() => setToggleAddProject(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+              <ul className="project--list">
+                {projects.map((proj) => (
+                  <li
+                    className="project--item"
+                    key={proj.id}
+                    onClick={() => {
+                      setSelectedFilter({
+                        filter: proj.name,
+                        projectId: proj.id,
+                      });
+                    }}
+                    style={
+                      selectedFilter.projectId === proj.id
+                        ? selectedStyle
+                        : unselectedStyle
+                    }
+                  >
+                    {proj.name}
+
+                    <i
+                      className="fa-solid fa-trash-can proj-delete"
+                      onClick={(e) => {
+                        deleteProject(e, proj);
+                      }}
+                    ></i>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+          <main>
+            <Greeting />
+            <div className="tasks--container">
+              <div className="tasks--header">
+                <h2>{selectedFilter.filter}</h2>
+                {!toggleAddTask && (
+                  <img
+                    className="add"
+                    onClick={() => {
+                      setToggleAddTask(true);
+                    }}
+                    src={add}
+                    alt="add task"
+                  />
+                )}
+              </div>
+              {
+                <Tasks
+                  selectedFilter={selectedFilter}
+                  tasks={tasks}
+                  projects={projects}
+                  deleteTask={deleteTask}
+                  completeTask={completeTask}
+                />
+              }
+              {toggleAddTask && (
+                <div className="tasks--new-task">
+                  <div className="tasks--inputs">
+                    <input
+                      type="text"
+                      placeholder="Task name"
+                      id="task"
+                      name="task"
+                      onChange={(e) => handleChange(e)}
+                      value={inputData.task}
+                    />
+                    <input
+                      type="date"
+                      name="date"
+                      id="date"
+                      onChange={(e) => {
+                        handleChange(e);
+                      }}
+                      value={inputData.date}
+                    />
+                  </div>
+                  <div className="tasks--btns">
+                    <button onClick={() => addTask()}>Add</button>
+                    <button onClick={() => setToggleAddTask(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </main>
+        </>
+      )}
     </>
   );
 }
