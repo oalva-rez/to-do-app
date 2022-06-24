@@ -3,6 +3,7 @@ import Tasks from "./Tasks";
 import Greeting from "./Greeting";
 import { nanoid } from "nanoid";
 import add from "./assets/add.png";
+import logo from "./assets/logo.png";
 
 export default function App() {
   const [inputData, setInputData] = useState({
@@ -119,7 +120,10 @@ export default function App() {
   return (
     <>
       <aside>
-        <h1>Bingota</h1>
+        <h1>
+          <img src={logo} alt="logo" />
+          Bingota
+        </h1>
         <div className="filters">
           <button
             onClick={() =>

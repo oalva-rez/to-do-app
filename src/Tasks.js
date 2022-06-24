@@ -43,7 +43,13 @@ export default function Tasks(props) {
   return (
     <ul className="tasks--list">
       {tasksToRender.map((task) => (
-        <li key={task.id} className="tasks--item">
+        <li
+          key={task.id}
+          className="tasks--item"
+          onClick={(e) => {
+            props.selectTask(e, task);
+          }}
+        >
           {task.isCompleted ? (
             <img
               src={checked}
@@ -70,6 +76,12 @@ export default function Tasks(props) {
               props.deleteTask(e, task);
             }}
           ></i>
+          {/* <i
+            className="fa-solid fa-pen-to-square"
+            onClick={(e) => {
+              props.selectTask(e, task);
+            }}
+          ></i> */}
         </li>
       ))}
     </ul>

@@ -23,7 +23,7 @@ export default function Greeting() {
     greeting = (
       <div className="greeting">
         <h1>Good Evening,</h1>
-        <h2>The moon looks beautiful tonight.</h2>
+        <h2>A nights rest for a better tomorrow.</h2>
       </div>
     );
   }

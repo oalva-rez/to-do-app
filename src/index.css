@@ -127,6 +127,7 @@ aside .filters {
   padding: 5px 20px;
   cursor: pointer;
   border-right: solid 7px transparent;
+  border-radius: 5px;
 }
 .project--item i {
   font-size: 0.9rem;
@@ -176,7 +177,9 @@ main {
   font-size: 1.5rem;
   padding: 10px 20px;
 }
-
+.tasks--header h2 {
+  color: black;
+}
 .tasks--header img {
   width: 40px;
   height: 40px;
@@ -214,10 +217,14 @@ main {
   background-color: var(--input--background);
   padding: 5px;
   border-radius: var(--btn-brad);
+  font-size: 1.3rem;
 }
 .tasks--btns {
   display: flex;
   gap: 5px;
+}
+.tasks--btns button {
+  font-size: 1.3rem;
 }
 .tasks--list {
   display: grid;
