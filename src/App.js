@@ -30,7 +30,7 @@ export default function App() {
     transition: "background-color, 250ms",
     transitionTimingFunction: "ease-in",
   };
-  console.log(JSON.parse(localStorage.getItem("tasks")));
+
   useEffect(() => {
     setInputData({
       task: "",
