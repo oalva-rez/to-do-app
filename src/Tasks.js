@@ -76,12 +76,6 @@ export default function Tasks(props) {
               props.deleteTask(e, task);
             }}
           ></i>
-          {/* <i
-            className="fa-solid fa-pen-to-square"
-            onClick={(e) => {
-              props.selectTask(e, task);
-            }}
-          ></i> */}
         </li>
       ))}
     </ul>

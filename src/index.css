@@ -152,6 +152,7 @@ main {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-left: 30px;
 }
 .greeting h1 {
   font-size: 1.5rem;
