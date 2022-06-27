@@ -12,7 +12,9 @@ export default function App() {
     date: "",
     project: "",
   });
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userInfo, setUserInfo] = useState({
+    uId: true,
+  });
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [toggleAddProject, setToggleAddProject] = useState(false);
@@ -120,9 +122,10 @@ export default function App() {
       };
     });
   }
+
   return (
     <>
-      {!isLoggedIn ? (
+      {!userInfo.uId ? (
         <SignIn />
       ) : (
         <>
@@ -259,6 +262,7 @@ export default function App() {
                   completeTask={completeTask}
                 />
               }
+
               {toggleAddTask && (
                 <div className="tasks--new-task">
                   <div className="tasks--inputs">

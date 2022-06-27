@@ -3,22 +3,21 @@ import logo from "./assets/logo.png";
 import google from "./assets/googleIcon.png";
 import divider from "./assets/Divider.png";
 import SignUp from "./SignUp";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
-export default function SignIn() {
-  const [userInput, setUserInput] = useState({ email: "", pwd: "" });
+export default function SignIn(props) {
+  const [userLogin, setUserLogin] = useState({ email: "", pwd: "" });
   const [signUpModal, setSignUpModal] = useState(false);
   function toggleModal() {
     setSignUpModal((prev) => !prev);
   }
-  function handleSubmit() {
-    createUserWithEmailAndPassword(auth, newUser.newEmail, newUser.newPwd)
-      .then((response) => {
-        console.log(response.user);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
+
+  function handleInput(e) {
+    setUserLogin((prev) => {
+      return {
+        ...prev,
+        [e.target.name]: e.target.value,
+      };
+    });
   }
   return (
     <>
@@ -53,11 +52,27 @@ export default function SignIn() {
             <label htmlFor="username-email" className="inp-label">
               User name or email address
             </label>
-            <input type="text" id="email" name="email" />
+            <input
+              type="text"
+              id="email"
+              name="email"
+              onChange={(e) => {
+                handleInput(e);
+              }}
+              value={userLogin.email}
+            />
             <label htmlFor="pwd" className="inp-label">
               Your password
             </label>
-            <input type="password" name="pwd" id="pwd" />
+            <input
+              type="password"
+              name="pwd"
+              id="pwd"
+              onChange={(e) => {
+                handleInput(e);
+              }}
+              value={userLogin.pwd}
+            />
             <button className="forget-pwd">Forget your password</button>
             <button className="signin-btn">Sign in</button>
             <p className="new-user">
