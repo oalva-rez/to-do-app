@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import google from "./assets/googleIcon.png";
-import divider from "./assets/Divider.png";
+import google from "../assets/googleIcon.png";
+import divider from "../assets/Divider.png";
 
 export default function SignUp(props) {
   const [newUser, setNewUser] = useState({ newEmail: "", newPwd: "" });

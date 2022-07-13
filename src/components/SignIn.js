@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import logo from "./assets/logo.png";
-import google from "./assets/googleIcon.png";
-import divider from "./assets/Divider.png";
+import logo from "../assets/logo.png";
+import google from "../assets/googleIcon.png";
+import divider from "../assets/Divider.png";
 import SignUp from "./SignUp";
 
 export default function SignIn(props) {

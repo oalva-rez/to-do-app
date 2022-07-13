@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Tasks from "./Tasks";
-import Greeting from "./Greeting";
-import SignIn from "./SignIn";
+import Tasks from "./components/Tasks";
+import Greeting from "./components/Greeting";
+import SignIn from "./components/SignIn";
 import { nanoid } from "nanoid";
 import add from "./assets/add.png";
 import logo from "./assets/logo.png";
