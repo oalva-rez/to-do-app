@@ -1,4 +1,28 @@
 import React, { useState, useEffect } from "react";
+import { initializeApp } from "firebase/app";
+import { getFirebaseConfig } from "./firebase-config";
+import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  limit,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import { getMessaging, getToken, onMessage } from "firebase/messaging";
+import { getPerformance } from "firebase/performance";
 import Tasks from "./components/Tasks";
 import Greeting from "./components/Greeting";
 import SignIn from "./components/SignIn";
@@ -7,6 +31,11 @@ import add from "./assets/add.png";
 import logo from "./assets/logo.png";
 
 export default function App() {
+  useEffect(() => {
+    const firebaseAppConfig = getFirebaseConfig();
+    initializeApp(firebaseAppConfig);
+  }, []);
+
   const [inputData, setInputData] = useState({
     task: "",
     date: "",

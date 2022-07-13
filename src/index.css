@@ -147,12 +147,16 @@ main {
   background-color: var(--tile-color);
   border-radius: var(--border-rad);
 }
-
 .greeting {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 30px;
+}
+.greeting--headings {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 30px;
 }
 .greeting h1 {
   font-size: 1.5rem;

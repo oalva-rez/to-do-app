@@ -1,32 +1,33 @@
 import React from "react";
 
-export default function Greeting() {
+export default function Greeting(props) {
   const today = new Date();
   const curHr = today.getHours();
-  let greeting;
+  let mainGreeting;
+  let subGreeting;
 
   if (curHr < 12) {
-    greeting = (
-      <div className="greeting">
-        <h1>Good Morning,</h1>
-        <h2>Hope you have a wonderful day.</h2>
-      </div>
-    );
+    mainGreeting = "Good Morning";
+    subGreeting = "Hope you have a wonderful morning!";
   } else if (curHr < 18) {
-    greeting = (
-      <div className="greeting">
-        <h1>Good Afternoon,</h1>
-        <h2>Lunch time yet?</h2>
-      </div>
-    );
+    mainGreeting = "Good Afternoon";
+    subGreeting = "Lunch time yet?";
   } else {
-    greeting = (
-      <div className="greeting">
-        <h1>Good Evening,</h1>
-        <h2>A nights rest for a better tomorrow.</h2>
-      </div>
-    );
+    mainGreeting = "Good Evening";
+    subGreeting = "A nights rest for a better tomorrow.";
   }
 
-  return <>{greeting}</>;
+  return (
+    <>
+      <div className="greeting">
+        <div className="greeting--headings">
+          <h1>{mainGreeting} </h1>
+          <h2>{subGreeting}</h2>
+        </div>
+        <div className="user-signout">
+          <button className="signout-btn">Sign Out</button>
+        </div>
+      </div>
+    </>
+  );
 }

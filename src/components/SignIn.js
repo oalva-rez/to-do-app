@@ -3,7 +3,7 @@ import logo from "../assets/logo.png";
 import google from "../assets/googleIcon.png";
 import divider from "../assets/Divider.png";
 import SignUp from "./SignUp";
-
+import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
 export default function SignIn(props) {
   const [userLogin, setUserLogin] = useState({ email: "", pwd: "" });
   const [signUpModal, setSignUpModal] = useState(false);
@@ -18,6 +18,10 @@ export default function SignIn(props) {
         [e.target.name]: e.target.value,
       };
     });
+  }
+  async function handleSignIn() {
+    let provider = new GoogleAuthProvider();
+    await signInWithPopup(getAuth(), provider);
   }
   return (
     <>
@@ -38,7 +42,7 @@ export default function SignIn(props) {
         <div className="signin--detail">
           <div className="google-signin">
             <h2>Sign in</h2>
-            <button className="google-btn">
+            <button className="google-btn" onClick={handleSignIn}>
               <img src={google} alt="google icon" /> Continue with Google
             </button>
           </div>
