@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import logo from "../assets/logo.png";
-import google from "../assets/googleIcon.png";
-import divider from "../assets/Divider.png";
-import SignUp from "./SignUp";
+import logo from "../../assets/logo.png";
+import google from "../../assets/googleIcon.png";
+import divider from "../../assets/Divider.png";
+import SignUp from "../SignUp/SignUp";
 export default function SignIn(props) {
   const [userLogin, setUserLogin] = useState({ email: "", pwd: "" });
   const [signUpModal, setSignUpModal] = useState(false);
@@ -30,9 +30,10 @@ export default function SignIn(props) {
           </div>
           <h2 className="hero--heading">Keep track of your tasks.</h2>
           <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
-            earum repellat obcaecati hic voluptatem quasi facere quaerat
-            laudantium dignissimos dolorem? Eum deleniti veniam unde ex!
+            Organize your projects by creating tasks with optional time
+            sensitive reminders. Filter your tasks by category and priority.
+            Never forget a task again with Bingota as your personal task
+            manager.
           </p>
         </div>
         <div className="signin--detail">

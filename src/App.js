@@ -17,9 +17,9 @@ import {
   getDocs,
 } from "firebase/firestore";
 
-import Tasks from "./components/Tasks";
-import Greeting from "./components/Greeting";
-import SignIn from "./components/SignIn";
+import Tasks from "./components/Tasks/Tasks";
+import Greeting from "./components/Greeting/Greeting";
+import SignIn from "./components/SignIn/SignIn";
 import { nanoid } from "nanoid";
 import add from "./assets/add.png";
 import logo from "./assets/logo.png";

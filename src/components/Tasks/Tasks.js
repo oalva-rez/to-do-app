@@ -3,8 +3,8 @@ import isToday from "date-fns/isToday";
 import parseISO from "date-fns/parseISO";
 import addDays from "date-fns/addDays";
 import isBefore from "date-fns/isBefore";
-import checked from "../assets/checked.png";
-import unchecked from "../assets/unchecked.png";
+import checked from "../../assets/checked.png";
+import unchecked from "../../assets/unchecked.png";
 
 export default function Tasks(props) {
   let tasksToRender = [];
