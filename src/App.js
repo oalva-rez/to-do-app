@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { initializeApp } from "firebase/app";
 import { getFirebaseConfig } from "./firebase-config";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  getAuth,
+  onAuthStateChanged,
+  signInWithPopup,
+  signOut,
+} from "firebase/auth";
 import {
   getFirestore,
   collection,
@@ -14,6 +20,7 @@ import {
   updateDoc,
   doc,
   serverTimestamp,
+  getDocs,
 } from "firebase/firestore";
 import {
   getStorage,
@@ -31,9 +38,24 @@ import add from "./assets/add.png";
 import logo from "./assets/logo.png";
 
 export default function App() {
+  function authStateObserver(user) {
+    if (user) {
+      setUserInfo((prev) => {
+        return { uId: user.uid, name: user.displayName, image: user.photoURL };
+      });
+    } else {
+      setUserInfo((prev) => {
+        return { ...prev, uId: false };
+      });
+    }
+  }
+  function initFirebaseAuth() {
+    onAuthStateChanged(getAuth(), authStateObserver);
+  }
   useEffect(() => {
     const firebaseAppConfig = getFirebaseConfig();
     initializeApp(firebaseAppConfig);
+    initFirebaseAuth();
   }, []);
 
   const [inputData, setInputData] = useState({
@@ -42,7 +64,9 @@ export default function App() {
     project: "",
   });
   const [userInfo, setUserInfo] = useState({
-    uId: true,
+    uId: false,
+    name: null,
+    image: "http://www.gravatar.com/avatar/?d=identicon",
   });
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -63,8 +87,35 @@ export default function App() {
     transition: "background-color, 250ms",
     transitionTimingFunction: "ease-in",
   };
-
   useEffect(() => {
+    const colRef = collection(getFirestore(), "users");
+    getDocs(colRef).then((snapshot) => {
+      snapshot.docs.forEach((doc) => {
+        if (doc.id === userInfo.uId) {
+          setTasks(doc.data().tasks);
+          setProjects(doc.data().projects);
+        }
+      });
+    });
+  }, [userInfo.uId]);
+  useEffect(() => {
+    async function saveTodo() {
+      try {
+        if (tasks.length > 0) {
+          await setDoc(doc(getFirestore(), "users", userInfo.uId), {
+            tasks,
+            projects,
+            name: userInfo.name,
+            uId: userInfo.uId,
+            createdAt: serverTimestamp(),
+          });
+        }
+      } catch (error) {
+        console.log("Error writing new todo to Firebase Database", error);
+      }
+    }
+
+    saveTodo();
     setInputData({
       task: "",
       date: "",
@@ -72,6 +123,29 @@ export default function App() {
     });
   }, [tasks, projects]);
 
+  async function handleSignIn() {
+    let provider = new GoogleAuthProvider();
+    await signInWithPopup(getAuth(), provider);
+    setUserInfo((prev) => {
+      return {
+        ...prev,
+        uId: getAuth().currentUser.uid,
+        name: getAuth().currentUser.displayName,
+        image: getAuth().currentUser.photoURL,
+      };
+    });
+  }
+  function handleSignOut() {
+    signOut(getAuth());
+    setUserInfo((prev) => {
+      return {
+        ...prev,
+        uId: false,
+      };
+    });
+    setTasks([]);
+    setProjects([]);
+  }
   function addProject() {
     setToggleAddProject(false);
     let pId = nanoid();
@@ -155,7 +229,7 @@ export default function App() {
   return (
     <>
       {!userInfo.uId ? (
-        <SignIn />
+        <SignIn handleSignIn={handleSignIn} />
       ) : (
         <>
           <aside>
@@ -267,7 +341,7 @@ export default function App() {
             </div>
           </aside>
           <main>
-            <Greeting />
+            <Greeting handleSignOut={handleSignOut} userInfo={userInfo} />
             <div className="tasks--container">
               <div className="tasks--header">
                 <h2>{selectedFilter.filter}</h2>
