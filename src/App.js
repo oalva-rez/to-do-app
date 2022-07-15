@@ -38,6 +38,35 @@ import add from "./assets/add.png";
 import logo from "./assets/logo.png";
 
 export default function App() {
+  const [tasks, setTasks] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [toggleAddProject, setToggleAddProject] = useState(false);
+  const [toggleAddTask, setToggleAddTask] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState({
+    filter: "Home",
+    projectId: null,
+  });
+  const [inputData, setInputData] = useState({
+    task: "",
+    date: "",
+    project: "",
+  });
+  const [userInfo, setUserInfo] = useState({
+    uId: false,
+    name: null,
+    image: "http://www.gravatar.com/avatar/?d=identicon",
+  });
+  const selectedStyle = {
+    backgroundColor: "#ffcdb4",
+    borderRight: "7px solid #FD7B38",
+    transition: "background-color, 250ms",
+    transitionTimingFunction: "ease-in-out",
+  };
+  const unselectedStyle = {
+    backgroundColor: "#FFFFFF",
+    transition: "background-color, 250ms",
+    transitionTimingFunction: "ease-in",
+  };
   function authStateObserver(user) {
     if (user) {
       setUserInfo((prev) => {
@@ -52,41 +81,15 @@ export default function App() {
   function initFirebaseAuth() {
     onAuthStateChanged(getAuth(), authStateObserver);
   }
+
+  // init auth observer
   useEffect(() => {
     const firebaseAppConfig = getFirebaseConfig();
     initializeApp(firebaseAppConfig);
     initFirebaseAuth();
   }, []);
 
-  const [inputData, setInputData] = useState({
-    task: "",
-    date: "",
-    project: "",
-  });
-  const [userInfo, setUserInfo] = useState({
-    uId: false,
-    name: null,
-    image: "http://www.gravatar.com/avatar/?d=identicon",
-  });
-  const [tasks, setTasks] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [toggleAddProject, setToggleAddProject] = useState(false);
-  const [toggleAddTask, setToggleAddTask] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState({
-    filter: "Home",
-    projectId: null,
-  });
-  const selectedStyle = {
-    backgroundColor: "#ffcdb4",
-    borderRight: "7px solid #FD7B38",
-    transition: "background-color, 250ms",
-    transitionTimingFunction: "ease-in-out",
-  };
-  const unselectedStyle = {
-    backgroundColor: "#FFFFFF",
-    transition: "background-color, 250ms",
-    transitionTimingFunction: "ease-in",
-  };
+  // load user tasks and projects
   useEffect(() => {
     const colRef = collection(getFirestore(), "users");
     getDocs(colRef).then((snapshot) => {
@@ -98,6 +101,8 @@ export default function App() {
       });
     });
   }, [userInfo.uId]);
+
+  // save user todo and projects to db
   useEffect(() => {
     async function saveTodo() {
       try {
